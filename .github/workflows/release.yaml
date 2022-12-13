@@ -1,0 +1,29 @@
+name: Release
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    uses: ghifari160/vtt-observe/.github/workflows/build.yaml@main
+    with:
+      storeArtifacts: true
+  upload-artifacts-release:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        id: artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: vtt-observe
+      - name: Upload artifacts to release page
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            ${{steps.artifacts.outputs.download-path}}/vtt-observe.zip/vtt-observe.zip
+  upload-artifacts-cws:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+    - run: echo "Nothing to do for now."
