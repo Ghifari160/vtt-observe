@@ -4,6 +4,8 @@
         "target": "ES2017",
         "module": "CommonJS",
         "moduleResolution": "Node",
+        "types": [ "node", "chrome-types" ],
+        "lib": ["DOM"],
         "resolveJsonModule": true,
         "esModuleInterop": true
     }
