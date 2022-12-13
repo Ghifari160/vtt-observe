@@ -1,4 +1,5 @@
 # VTT Observe
+[![Push check](https://github.com/Ghifari160/vtt-observe/actions/workflows/push.yaml/badge.svg)](https://github.com/Ghifari160/vtt-observe/actions/workflows/push.yaml)
 
 [Chrome](https://www.google.com/chrome/) extension to remove Roll20 UIs for observer account.
 
@@ -23,13 +24,7 @@ First, install dependencies.
 npm i
 ```
 
-Then, configure the build environment.
-
-``` shell
-npm run configure
-```
-
-Finally, build the _unpacked_ extension.
+Then, build the _unpacked_ extension.
 
 ``` shell
 npm run build
