@@ -1,0 +1,27 @@
+{
+  "name": "vtt-observe",
+  "version": "0.1.0",
+  "description": "Remove Roll20 UIs for observer account",
+  "private": true,
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ghifari160/vtt-observe.git"
+  },
+  "author": "GHIFARI160",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/Ghifari160/vtt-observe/issues"
+  },
+  "homepage": "https://github.com/Ghifari160/vtt-observe#readme",
+  "devDependencies": {
+    "@types/node": "^18.11.13",
+    "@typescript-eslint/eslint-plugin": "^5.46.1",
+    "@typescript-eslint/parser": "^5.46.1",
+    "chrome-types": "^0.1.153",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.29.0",
+    "typescript": "^4.9.4",
+  }
+}

@@ -1,0 +1,20 @@
+# OS-specific ignores
+## Windows
+Thumbs.db
+
+## macOS
+.DS_Store
+
+## Linux
+lost+found
+
+# Stack-specific ignores
+node_modules
+
+# IDE-specific ignores
+## Visual Studio Code
+.vscode
+
+# Project-specific ignores
+out
+dist
