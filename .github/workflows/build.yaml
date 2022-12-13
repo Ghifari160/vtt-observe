@@ -1,0 +1,36 @@
+name: Build extension
+on:
+  workflow_call:
+    inputs:
+      storeArtifacts:
+        type: boolean
+        required: true
+        description: "Store build artifacts"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup source repo
+        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 19
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - name: Install dependencies
+        run: npm i
+      - name: Configure build environment
+        run: npm run configure
+      - name: Build
+        run: npm run build
+      - name: Create build archive
+        if: ${{inputs.storeArtifacts}}
+        run: cd out && zip -r ../vtt-observe.zip . && cd ..
+      - name: Upload artifacts
+        if: ${{inputs.storeArtifacts}}
+        uses: actions/upload-artifact@v3
+        with:
+          name: vtt-observe.zip
+          path: vtt-observe.zip

@@ -1,0 +1,8 @@
+name: Push check
+on: push
+
+jobs:
+  build:
+    uses: ghifari160/vtt-observe/.github/workflows/build.yaml@main
+    with:
+      storeArtifacts: false
