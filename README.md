@@ -1,3 +1,7 @@
+<p align="center">
+    <img src="images/icon-128.png" alt="VTT Observe" />
+</p>
+
 # VTT Observe
 [![Push check](https://github.com/Ghifari160/vtt-observe/actions/workflows/push.yaml/badge.svg)](https://github.com/Ghifari160/vtt-observe/actions/workflows/push.yaml)
 

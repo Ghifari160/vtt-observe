@@ -33,6 +33,15 @@ function stepGetBackground():any {
     };
 }
 
+function stepGetIcons():any {
+    return {
+        16: "images/icon-16.png",
+        32: "images/icon-32.png",
+        48: "images/icon-48.png",
+        128: "images/icon-128.png",
+    }
+}
+
 function stepGenManifest(pkgManPath:string, extManOut:string) {
     let pkg = stepParseManifest(pkgManPath);
 
@@ -45,10 +54,13 @@ function stepGenManifest(pkgManPath:string, extManOut:string) {
         // recommended fields
         // default_locale: "en",
         description: pkg.description,
+        icons: stepGetIcons(),
 
         // optional fields
         author: pkg.author,
-        action: {},
+        action: {
+            default_icon: stepGetIcons(),
+        },
         homepage_url: pkg.homepage,
         permissions: perms,
         background: stepGetBackground(),

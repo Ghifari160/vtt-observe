@@ -4,13 +4,14 @@
   "description": "Remove Roll20 UIs for observer account",
   "private": true,
   "scripts": {
-    "build": "cross-env npm run build:dir && npm run build:manifest && npm run build:webpack",
+    "build": "cross-env npm run build:dir && npm run build:manifest && npm run build:icons && npm run build:webpack",
     "prepare": "cross-env npm run buildscripts:manifest",
     "clean": "cross-env npm run clean:build",
     "fullclean": "cross-env npm run clean && npm run clean:scripts",
 
     "build:dir": "cross-env mkdir -p out",
     "build:manifest": "cross-env node scripts/manifest/",
+    "build:icons": "cross-env cp -R images out",
     "build:webpack": "cross-env webpack --mode production",
 
     "clean:build": "cross-env rm -rf out",
