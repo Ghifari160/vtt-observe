@@ -1,7 +1,10 @@
 const path = require("path");
 
 module.exports = {
-    entry: "./content/index.ts",
+    entry: {
+        background: "./background/index.ts",
+        content: "./content/index.ts",
+    },
     module: {
         rules: [
             {
@@ -15,7 +18,7 @@ module.exports = {
         extensions: [ ".tsx", ".ts", ".js" ],
     },
     output: {
-        filename: "content.js",
-        path: path.resolve(__dirname, "out", "content")
+        filename: "[name].js",
+        path: path.resolve(__dirname, "out")
     },
 };
