@@ -10,7 +10,6 @@ const buildDir = "out";
 
 const perms = [ "activeTab", "scripting" ];
 const vttWhitelist = [ "https://app.roll20.net/editor/*" ];
-const scripts = [ "content.js" ];
 const serviceWorker = "background.js";
 
 main();
@@ -26,13 +25,6 @@ function stepParseManifest(manPath:string):any {
     let manStr = fs.readFileSync(manPath, "utf8");
 
     return JSON.parse(manStr)
-}
-
-function stepGetContentScripts():any {
-    return [{
-        js: scripts,
-        matches: vttWhitelist,
-    }];
 }
 
 function stepGetBackground():any {
@@ -57,7 +49,6 @@ function stepGenManifest(pkgManPath:string, extManOut:string) {
         // optional fields
         author: pkg.author,
         action: {},
-        // content_scripts: stepGetContentScripts(),
         homepage_url: pkg.homepage,
         permissions: perms,
         background: stepGetBackground(),
