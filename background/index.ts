@@ -1,5 +1,5 @@
 import app from "../package.json";
-import { RemoveQueries as roll20 } from "../content/roll20";
+import { getVTTID, getRemoveQueries } from "../vtt";
 
 const ON = "ON";
 const OFF = "OFF";
@@ -15,22 +15,24 @@ chrome.runtime.onInstalled.addListener(() => {
 });
 
 chrome.action.onClicked.addListener(async (tab) => {
-    if (tab.url.startsWith("https://app.roll20.net/editor/")) {
-        const pState = await chrome.action.getBadgeText({tabId: tab.id});
-        const nState = pState === ON ? OFF : ON;
+    if (getVTTID(tab.url) !== undefined) {
+        let state = await chrome.action.getBadgeText({tabId: tab.id});
+        state = state === ON ? OFF : ON;
 
-        await chrome.action.setBadgeText({text: nState, tabId: tab.id});
+        await chrome.action.setBadgeText({text: state, tabId: tab.id});
 
-        if (nState === ON) {
+        if (state === ON) {
             log(`Enabling on tab ${tab.index}.`);
+
+            const remQ = await getRemoveQueries(tab.url);
 
             chrome.scripting.executeScript({
                 target: {tabId: tab.id},
                 func: removeUI,
-                args: [ app.name, roll20 ],
+                args: [ app.name, remQ],
             });
-        } else if (nState === OFF) {
-            log(`Disabling on tab ${tab.index}. Reloading the page.`);
+        } else if (state === OFF) {
+            log(`Disabling on tab ${tab.index}.`);
 
             chrome.tabs.reload(tab.id);
         }
