@@ -37,7 +37,8 @@ chrome.action.onClicked.addListener(async (tab) => {
             chrome.tabs.reload(tab.id);
         }
     } else {
-        log(`Cannot enable for tab ${tab.index} (${tab.url}): not a VTT.`);
+        log(`Cannot enable for tab ${tab.index} (${tab.url}): not a VTT. Request VTT support over `
+            + `on ${app.bugs.url}`);
     }
 });
 
