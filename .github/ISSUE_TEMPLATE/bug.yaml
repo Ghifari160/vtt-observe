@@ -39,8 +39,8 @@ body:
   - type: checkboxes
     id: present-in-latest
     attributes:
-      label: Present in latest version?
+      label: "Present in latest version?"
       description: Is this issue present in the latest version of VTT Observe?
       options:
-        - label: Yes
+        - label: "Yes"
           required: false
