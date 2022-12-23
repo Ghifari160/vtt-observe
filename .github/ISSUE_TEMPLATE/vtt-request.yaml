@@ -1,0 +1,48 @@
+name: Request VTT Support
+description: Request a VTT system to be supported
+labels: ["FeatureRequest"]
+body:
+  - type: input
+    id: vtt-name
+    attributes:
+      label: VTT Name
+      description: What is the name of the VTT system?
+      placeholder: ex. Roll20
+    validations:
+      required: true
+  - type: input
+    id: vtt-url
+    attributes:
+      label: VTT URL
+      description: What is the URL of this VTT?
+      placeholder: ex. https://roll20.net/
+    validations:
+      required: true
+  - type: dropdown
+    id: vtt-type
+    attributes:
+      label: VTT Type
+      description: Do we need a subscription to access this VTT? Select "Free" if a free trial is available?
+      multiple: false
+      options:
+        - "Paid"
+        - "Free"
+    validations:
+      required: true
+  - type: dropdown
+    id: vtt-access
+    attributes:
+      label: "PAID VTT: Access"
+      description: "FOR PAID VTT ONLY: Are you willing to give us access to the VTT (ex. as a guest in a dummy campaign)?"
+      multiple: false
+      options:
+        - "Yes"
+        - "No"
+    validations:
+      required: false
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional Information
+      description: List any other information that might be useful for us to know here.
+      placeholder: Additional information

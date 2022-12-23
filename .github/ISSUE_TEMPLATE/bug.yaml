@@ -1,0 +1,46 @@
+name: Bug Report
+description: Report a bug
+labels: ["Bug"]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: "What version of VTT Observe are you running? (Usually listed on the extension details here: `chrome://extensions/?id=oeekmbjfcokjhbhddfenmcjfapmlolii`)"
+      placeholder: 0.2.0
+    validations:
+      required: true
+  - type: input
+    id: chrome-version
+    attributes:
+      label: Chrome Version
+      description: What version of Chrome are you running? (`chrome://version/`)
+      placeholder: "108.0.5359.125 (Official Build) (64-bit) (cohort: Stable)"
+    validations:
+      required: true
+  - type: dropdown
+    id: vtt
+    attributes:
+      label: VTT
+      description: What VTT were you using when this issue occured?
+      multiple: true
+      options:
+        - "Roll20"
+    validations:
+      required: true
+  - type: textarea
+    id: issue
+    attributes:
+      label: What Happened
+      description: Describe the issue in detail. Also describe what you expected to happen.
+      placeholder: An issue occured.
+    validations:
+      required: true
+  - type: checkboxes
+    id: present-in-latest
+    attributes:
+      label: Present in latest version?
+      description: Is this issue present in the latest version of VTT Observe?
+      options:
+        - label: Yes
+          required: false
