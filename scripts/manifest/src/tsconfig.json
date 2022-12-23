@@ -1,11 +1,1 @@
-{
-    "compilerOptions": {
-        "noImplicitAny": true,
-        "target": "ES2017",
-        "module": "CommonJS",
-        "moduleResolution": "Node",
-        "types": [ "node" ],
-        "resolveJsonModule": true,
-        "esModuleInterop": true
-    }
-}
+../../tsconfig.json
