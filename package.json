@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "build": "cross-env npm run build:dir && npm run build:manifest && npm run build:icons && npm run build:webpack",
-    "prepare": "cross-env npm run buildscripts:manifest",
+    "prepare": "cross-env-shell npm run buildscripts:manifest && npm run buildscripts:version",
     "clean": "cross-env npm run clean:build",
     "fullclean": "cross-env npm run clean && npm run clean:scripts",
 
@@ -15,10 +15,12 @@
     "build:webpack": "cross-env webpack --mode production",
 
     "clean:build": "cross-env rm -rf out",
-    "clean:scripts": "cross-env npm run clean:scripts:manifest",
+    "clean:scripts": "cross-env npm run clean:scripts:manifest && npm run clean:scripts:version",
     "clean:scripts:manifest": "cross-env rm scripts/manifest/*.js",
+    "clean:scripts:version": "cross-env rm scripts/version/*.js",
 
-    "buildscripts:manifest": "cross-env tsc -p scripts/manifest/src --outDir scripts/manifest/"
+    "buildscripts:manifest": "cross-env tsc -p scripts/manifest/src --outDir scripts/manifest/",
+    "buildscripts:version": "cross-env tsc -p scripts/version/src --outDir scripts/version/"
   },
   "repository": {
     "type": "git",
