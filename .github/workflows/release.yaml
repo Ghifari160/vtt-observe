@@ -42,3 +42,31 @@ jobs:
         refresh-token: ${{secrets.CWS_AUTH_CODE}}
         file-path: ${{steps.artifacts.outputs.download-path}}/vtt-observe.zip/vtt-observe.zip
         publish: false
+  upload-artifacts-do:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Get version
+      id: version
+      uses: actions/github-script@v6
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        script: return context.ref.replace(/refs\/tags\//, "")
+        result-encoding: string
+    - name: Setup s3cmd
+      uses: s3-actions/s3cmd@v1.3.0
+      with:
+        provider: digitalocean
+        region: nyc3
+        access_key: ${{secrets.S3_ACCESS_KEY}}
+        secret_key: ${{secrets.S3_SECRET_KEY}}
+    - name: Download build artifacts
+      id: artifacts
+      uses: actions/download-artifact@v3
+      with:
+        path: vtt-observe
+    - name: Upload artifacts to DO Spaces
+      env:
+        version: v${{steps.version.outputs.result}}
+      run: |
+        s3cmd put ${{steps.artifacts.outputs.download-path}}/vtt-observe.zip/vtt-observe.zip --mime-type application/zip -P s3://g16projects-prod/vtt-observe/$VERSION/
