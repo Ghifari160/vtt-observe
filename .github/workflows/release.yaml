@@ -28,4 +28,17 @@ jobs:
     needs: [build]
     runs-on: ubuntu-latest
     steps:
-    - run: echo "Nothing to do for now."
+    - name: Download artifacts
+      id: artifacts
+      uses: actions/download-artifact@v3
+      with:
+        path: vtt-observe
+    - name: Upload artifacts to Chrome Extension
+      uses: mnao305/chrome-extension-upload@v4
+      with:
+        extension-id: ${{secrets.CWS_EXT_ID}}
+        client-id: ${{secrets.CWS_CLIENT_ID}}
+        client-secret: ${{secrets.CWS_CLIENT_SECRET}}
+        refresh-token: ${{secrets.CWS_AUTH_CODE}}
+        file-path: ${{steps.artifacts.outputs.download-path}}/vtt-observe.zip/vtt-observe.zip
+        publish: false
