@@ -1,5 +1,5 @@
 import BEM from "./bem";
-import { Message, Config } from "../common";
+import { Message, Config, log } from "../common";
 import React from "react";
 import Toggle from "./toggle";
 
@@ -60,7 +60,7 @@ class Configuration extends React.Component<{
                 config.set(key);
                 op++;
             } else {
-                console.log("Unsupported VTT or not a VTT.");
+                log(`[${this.props.tabID}] Unsupported VTT or not a VTT.`);
             }
         } else {
             if (config.enabled("global")) {
@@ -70,7 +70,7 @@ class Configuration extends React.Component<{
         }
 
         if (op > 0) {
-            console.log(`${key} set to ${config.enabled(key)}`);
+            log(`[${this.props.tabID}] ${key} set to ${config.enabled(key)}`);
 
             this.setState({ config: config });
 
@@ -80,7 +80,7 @@ class Configuration extends React.Component<{
                 config: config.serialize()
             };
 
-            console.log(this.props.tabID, "send msg");
+            log(`[${this.props.tabID}] send msg`);
             this.state.msg.postMessage(msg);
         }
     }

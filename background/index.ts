@@ -1,13 +1,9 @@
 import app from "../package.json";
 import { getRemQ } from "../vtt";
-import { Message, Config } from "../common";
+import { Message, Config, log } from "../common";
 
 const ON = "ON";
 const OFF = "OFF";
-
-function log(message:string){
-    console.log(`[${app.name}] ${message}`);
-}
 
 async function getTabIndex(tabID:number):Promise<number> {
     const tab = await chrome.tabs.get(tabID);
