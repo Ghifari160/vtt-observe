@@ -1,7 +1,8 @@
 import BEM from "./bem";
-import { Config } from "../vtt";
+import { Message, Config } from "../common";
 import React from "react";
 import Toggle from "./toggle";
+
 
 class Input extends React.Component<{
     label:string
@@ -34,9 +35,11 @@ class Input extends React.Component<{
 class Configuration extends React.Component<{
     config:Config
     vttSupported:boolean
+    tabID:number
 }, {
     BEM:BEM,
     config:Config
+    msg:chrome.runtime.Port
 }> {
     constructor(props:any) {
         super(props);
@@ -44,6 +47,7 @@ class Configuration extends React.Component<{
         this.state = {
             BEM: new BEM("config"),
             config: props.config,
+            msg: chrome.runtime.connect(null, {name: "popup"}),
         };
     }
 
@@ -69,6 +73,15 @@ class Configuration extends React.Component<{
             console.log(`${key} set to ${config.enabled(key)}`);
 
             this.setState({ config: config });
+
+            let msg:Message = {
+                tabID: this.props.tabID,
+                // config: config,
+                config: config.serialize()
+            };
+
+            console.log(this.props.tabID, "send msg");
+            this.state.msg.postMessage(msg);
         }
     }
 

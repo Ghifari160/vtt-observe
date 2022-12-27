@@ -1,6 +1,7 @@
 import BEM from "../components/bem";
 import Configuration from "../components/configuration";
-import { Config, getVTTID } from "../vtt";
+import { getVTTID, getConfig } from "../vtt";
+import { Config } from "../common";
 import Heading from "../components/heading";
 import React from "react";
 import ReactDOM from "react-dom";
@@ -9,6 +10,7 @@ type Props = {
     appName:string
     vttName?:string
 
+    tabID:number
     config:Config
     vttSupported:boolean
 };
@@ -35,23 +37,33 @@ class Popup extends React.Component<Props, State> {
             </div>
 
             <div className={BEM.getElement("config")}>
-                <Configuration config={this.props.config} vttSupported={this.props.vttSupported} />
+                <Configuration tabID={this.props.tabID} config={this.props.config}
+                    vttSupported={this.props.vttSupported} />
             </div>
         </div>;
     }
 };
 
 async function onReady() {
-    const config:Config = new Config();
-    const vttSupported = getVTTID(await getTabURL()) !== undefined;
+    const tabURL = await getTabURL();
+    const tabID = await getTabID();
 
-    ReactDOM.render(<Popup appName="VTT Observe" config={config} vttSupported={vttSupported} />,
+    const vttSupported = getVTTID(tabURL) !== undefined;
+    const config:Config = await getConfig(tabURL);
+
+    ReactDOM.render(<Popup appName="VTT Observe" vttName={getVTTID(tabURL)} tabID={tabID}
+        config={config} vttSupported={vttSupported} />,
         document.querySelector("body"));
 }
 
 async function getTabURL():Promise<string> {
     const tabs = await chrome.tabs.query({active: true, currentWindow: true});
     return tabs[0].url;
+}
+
+async function getTabID():Promise<number> {
+    const tabs = await chrome.tabs.query({active: true, currentWindow: true});
+    return tabs[0].id;
 }
 
 document.onreadystatechange = async function() {

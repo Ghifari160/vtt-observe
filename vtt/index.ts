@@ -1,4 +1,4 @@
-import { ConfEntry, Config } from "./config";
+import { Config } from "../common";
 
 const ROLL20:string = "roll20";
 
@@ -33,4 +33,28 @@ export async function getRemoveQueries(url:string):Promise<string[]> {
     return undefined;
 }
 
-export { ConfEntry, Config };
+export async function getConfig(url:string):Promise<Config> {
+    const id = getVTTID(url);
+
+    if (id !== undefined) {
+        switch (id) {
+            case ROLL20:
+                return new (await require("./roll20").default);
+        }
+    }
+
+    return new Config();
+}
+
+export async function getRemQ(url:string, config:Config):Promise<string[]> {
+    const id = getVTTID(url);
+
+    if (id !== undefined) {
+        switch (id) {
+            case ROLL20:
+                return (await require("./roll20")).getRemQ(config);
+        }
+    }
+
+    return [];
+}

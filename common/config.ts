@@ -55,18 +55,6 @@ export class Config {
         this.c.set(key, entry);
     }
 
-    s(key:string, enabled:boolean) {
-        let entry = this.c.get(key);
-
-        if (typeof entry === "undefined") {
-            entry = newEntry(key, key, enabled);
-        } else {
-            entry.enabled = enabled;
-        }
-
-        this.c.set(key, entry);
-    }
-
     get(key:string):ConfEntry {
         return this.c.get(key);
     }
@@ -89,5 +77,21 @@ export class Config {
         }
 
         return false;
+    }
+
+    serialize():string {
+        let entries = this.getAll();
+
+        return JSON.stringify(entries);
+    }
+
+    deserialize(json:string) {
+        let entries:ConfEntry[] = JSON.parse(json);
+
+        if (typeof entries !== "undefined") {
+            entries.forEach((entry) => {
+                this.c.set(entry.key, entry);
+            });
+        }
     }
 };

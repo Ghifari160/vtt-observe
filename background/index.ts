@@ -1,5 +1,6 @@
 import app from "../package.json";
-import { getVTTID, getRemoveQueries } from "../vtt";
+import { getRemQ } from "../vtt";
+import { Message, Config } from "../common";
 
 const ON = "ON";
 const OFF = "OFF";
@@ -8,39 +9,54 @@ function log(message:string){
     console.log(`[${app.name}] ${message}`);
 }
 
-chrome.runtime.onInstalled.addListener(() => {
-    log(`${app.name} v${app.version} loaded.`);
+async function getTabIndex(tabID:number):Promise<number> {
+    const tab = await chrome.tabs.get(tabID);
+    return tab.index;
+}
 
-    chrome.action.setBadgeText({text: OFF});
+async function getTabURL(tabID:number):Promise<string> {
+    const tab = await chrome.tabs.get(tabID);
+    return tab.url;
+}
+
+chrome.runtime.onConnect.addListener(async (port) => {
+    let confMap = new Map<number, Config>();
+
+    port.onMessage.addListener(async (msg:Message) => {
+        const tabID = msg.tabID;
+        const tabIndex = await getTabIndex(tabID);
+        const tabURL = await getTabURL(tabID);
+
+        log(`msg from ${tabID}`);
+
+        let conf = new Config();
+        conf.deserialize(msg.config);
+
+        confMap.set(tabID, conf);
+
+        handleConfChange(confMap, tabID, tabIndex, tabURL);
+    });
 });
 
-chrome.action.onClicked.addListener(async (tab) => {
-    if (getVTTID(tab.url) !== undefined) {
-        let state = await chrome.action.getBadgeText({tabId: tab.id});
-        state = state === ON ? OFF : ON;
+async function handleConfChange(confMap:Map<number, Config>, tabID:number, tabIndex:number, tabURL:string) {
+    const conf = confMap.get(tabID);
 
-        await chrome.action.setBadgeText({text: state, tabId: tab.id});
+    if (conf.enabled("global")) {
+        log(`Enabling on tab ${tabIndex}.`);
 
-        if (state === ON) {
-            log(`Enabling on tab ${tab.index}.`);
+        const remQ = await getRemQ(tabURL, conf);
 
-            const remQ = await getRemoveQueries(tab.url);
-
-            chrome.scripting.executeScript({
-                target: {tabId: tab.id},
-                func: removeUI,
-                args: [ app.name, remQ],
-            });
-        } else if (state === OFF) {
-            log(`Disabling on tab ${tab.index}.`);
-
-            chrome.tabs.reload(tab.id);
-        }
+        chrome.scripting.executeScript({
+            target: { tabId: tabID },
+            func: removeUI,
+            args: [ app.name, remQ ],
+        });
     } else {
-        log(`Cannot enable for tab ${tab.index} (${tab.url}): not a VTT. Request VTT support over `
-            + `on ${app.bugs.url}`);
+        log(`Disabling on tab ${tabIndex}.`);
+
+        chrome.tabs.reload(tabID);
     }
-});
+}
 
 function removeUI(app:void, remQ:void) {
     const log = function(message:string){
