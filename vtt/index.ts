@@ -1,3 +1,5 @@
+import { ConfEntry, Config } from "./config";
+
 const ROLL20:string = "roll20";
 
 interface URLMap {
@@ -30,3 +32,5 @@ export async function getRemoveQueries(url:string):Promise<string[]> {
 
     return undefined;
 }
+
+export { ConfEntry, Config };

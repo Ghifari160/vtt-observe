@@ -59,6 +59,7 @@ function stepGenManifest(pkgManPath:string, extManOut:string) {
         // optional fields
         author: pkg.author,
         action: {
+            default_popup: "pages/popup.html",
             default_icon: stepGetIcons(),
         },
         homepage_url: pkg.homepage,
