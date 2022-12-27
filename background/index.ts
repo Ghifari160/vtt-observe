@@ -23,8 +23,6 @@ chrome.runtime.onConnect.addListener(async (port) => {
         const tabIndex = await getTabIndex(tabID);
         const tabURL = await getTabURL(tabID);
 
-        log(`msg from ${tabID}`);
-
         let conf = new Config();
         conf.deserialize(msg.config);
 

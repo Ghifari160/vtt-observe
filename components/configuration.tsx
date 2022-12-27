@@ -76,11 +76,9 @@ class Configuration extends React.Component<{
 
             let msg:Message = {
                 tabID: this.props.tabID,
-                // config: config,
                 config: config.serialize()
             };
 
-            log(`[${this.props.tabID}] send msg`);
             this.state.msg.postMessage(msg);
         }
     }
