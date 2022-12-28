@@ -1,6 +1,8 @@
 import BEM from "./bem";
 import React from "react";
 
+import "./toggle.scss";
+
 type Props = {
     enabled?:boolean
 };
@@ -30,10 +32,10 @@ class Toggle extends React.Component<Props,State> {
             sliderModifier.push("disabled");
         }
 
-        return <div className={BEM.getBlock()}>
-            <div className={BEM.getElement("slider", sliderModifier)}>
+        return <div className={BEM.getBlock(sliderModifier)}>
+            <div className={BEM.getElement("slider")}>
                 {/* TODO(ghifari160): replace placeholder legend with styled indicator */}
-                {(enabled) ? "I" : "O"}
+                {/* {(enabled) ? "I" : "O"} */}
             </div>
         </div>
     }

@@ -3,6 +3,8 @@ import { Opcode, Message, MsgBuilder, Config, log } from "../common";
 import React from "react";
 import Toggle from "./toggle";
 
+import "./configuration.scss";
+
 class Input extends React.Component<{
     label:string
     enabled:boolean

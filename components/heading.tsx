@@ -1,6 +1,8 @@
 import BEM from "./bem";
 import React from "react";
 
+import "./heading.scss";
+
 type Props = {
     appName: string,
     vttName?: string,

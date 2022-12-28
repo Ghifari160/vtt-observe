@@ -1,0 +1,24 @@
+.heading {
+    width: 100%;
+    height: 100%;
+
+    %common {
+        width: max-content;
+
+        margin: 5px auto;
+    }
+
+    &__appName {
+        @extend %common;
+
+        font-size: 2.25em;
+        font-weight: 700;
+    }
+
+    &__vttName {
+        @extend %common;
+
+        font-size: 1.5em;
+        font-weight: 500;
+    }
+}

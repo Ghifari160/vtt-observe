@@ -6,6 +6,8 @@ import Heading from "../components/heading";
 import React from "react";
 import ReactDOM from "react-dom";
 
+import "./popup.scss";
+
 type Props = {
     appName:string
     vttName?:string

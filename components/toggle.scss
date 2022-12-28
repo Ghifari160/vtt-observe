@@ -1,0 +1,58 @@
+$tgl-width: 40px;
+$tgl-height: 15px;
+
+$tgl-padding: calc($tgl-height / 4);
+$tgl-borderRadius: $tgl-height;
+
+$slider-size: $tgl-height;
+
+$slider-width: $slider-size;
+$slider-height: $slider-size;
+$slider-borderRadius: $slider-size;
+
+$slider-activeOffset: $tgl-width - $slider-width;
+
+.toggle {
+    width: $tgl-width;
+    height: $tgl-height;
+
+    padding: $tgl-padding;
+
+    border: 1px solid var(--toggle-border);
+    border-radius: $tgl-borderRadius;
+
+    cursor: pointer;
+
+    transition: background 500ms;
+
+    &__slider {
+        width: $slider-width;
+        height: $slider-height;
+
+        position: relative;
+        left: 0;
+
+        background-color: var(--toggle-indicator);
+
+        border: 0 solid var(--toggle-border);
+        border-radius: $slider-borderRadius;
+
+        transition: left 500ms;
+    }
+
+    &--enabled {
+        background-color: var(--toggle-slider-activeBg);
+
+        .toggle__slider {
+            left: $slider-activeOffset;
+        }
+    }
+
+    &--disabled {
+        background-color: var(--toggle-slider-inactiveBg);
+
+        .toggle__slider {
+            left: 0;
+        }
+    }
+}

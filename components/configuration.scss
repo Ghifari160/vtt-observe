@@ -1,0 +1,33 @@
+$input-fontSize: 1.2em;
+
+.input {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    align-content: space-between;
+
+    width: 100%;
+
+    margin: 10px auto;
+
+    %common {
+        font-size: $input-fontSize;
+    }
+
+    &__label {
+        @extend %common;
+    }
+
+    &__toggle {
+        @extend %common;
+    }
+}
+
+.config {
+    &--disabled {
+        .toggle {
+            cursor: not-allowed;
+        }
+    }
+}
