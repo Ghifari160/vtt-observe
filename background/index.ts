@@ -1,7 +1,7 @@
 import app from "../package.json";
 import { Opcode, Message, MsgBuilder, Config, log } from "../common";
 import { ConfigMap } from "./config-map";
-import { getConfig, getRemQ } from "../vtt";
+import { getConfig, getRemQ, Mod, getModQ } from "../vtt";
 
 const ON = "ON";
 const OFF = "OFF";
@@ -62,7 +62,14 @@ async function handleConfChange(confMap:ConfigMap, tabID:number, tabIndex:number
     if (conf.enabled("global")) {
         log(`Enabling on tab ${tabIndex}.`);
 
+        const modQ = await getModQ(tabURL, conf);
         const remQ = await getRemQ(tabURL, conf);
+
+        chrome.scripting.executeScript({
+            target: { tabId: tabID },
+            func: modUI,
+            args: [ app.name, modQ ],
+        });
 
         chrome.scripting.executeScript({
             target: { tabId: tabID },
@@ -101,4 +108,61 @@ function removeUI(app:void, remQ:void) {
     });
 
     log(`Removed ${remCount} UI elements.`);
+}
+
+function modUI(app:void, modQ:void) {
+    const log = function(message:string){
+        console.log(`[${app}] ${message}`);
+    };
+
+    enum Mode {
+        Remove,
+        AddStyle,
+    };
+
+    const addStyle = function(elem:Element, param:any) {
+        if (typeof param !== "string") {
+            return;
+        }
+
+        const curr = elem.getAttribute("style");
+        elem.setAttribute("style", `${param}${curr}`);
+    };
+
+    const remove = function(elem:Element, param:any) {
+        elem.remove();
+    }
+
+    let q = modQ as unknown as Mod[];
+
+    let modCount:number = 0;
+
+    q.forEach((query) => {
+        const elems = document.querySelectorAll(query.q);
+
+        if (elems.length > 1) {
+            log(`Modifying multiple instances of ${query.q}.`);
+        } else {
+            log(`Modifying ${query.q}.`);
+        }
+
+        elems.forEach((elem) => {
+            switch (query.mode) {
+                case Mode.Remove:
+                    remove(elem, query.param);
+                    modCount++;
+                    break;
+
+                case Mode.AddStyle:
+                    addStyle(elem, query.param);
+                    modCount++;
+                    break;
+
+                default:
+                    break;
+            }
+        });
+    });
+
+    log(`Modified ${modCount} UI elements.`);
 }

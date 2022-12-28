@@ -1,4 +1,5 @@
 import { Config } from "../common";
+import { Mode, Mod } from "./mod";
 
 const ROLL20:string = "roll20";
 
@@ -58,3 +59,18 @@ export async function getRemQ(url:string, config:Config):Promise<string[]> {
 
     return [];
 }
+
+export async function getModQ(url:string, config:Config):Promise<Mod[]> {
+    const id = getVTTID(url);
+
+    if (id !== undefined) {
+        switch (id) {
+            case ROLL20:
+                return (await require("./roll20")).getModQ(config);
+        }
+    }
+
+    return [];
+}
+
+export { Mode, Mod };
