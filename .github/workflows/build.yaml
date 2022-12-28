@@ -1,4 +1,3 @@
-name: Build extension
 on:
   workflow_call:
     inputs:
