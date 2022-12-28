@@ -1,7 +1,0 @@
-{
-    "remove": [
-        "#floatingtoolbar",
-        "#zoomclick",
-        ".dark-mode-switch"
-    ]
-}

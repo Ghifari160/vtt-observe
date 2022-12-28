@@ -18,28 +18,6 @@ class Roll20Config extends Config {
 };
 export default Roll20Config;
 
-export function getRemQ(conf:Config):string[] {
-    let remQ:string[] = [];
-
-    if (conf.enabled("roll20.toolbar")) {
-        remQ.push("#floatingtoolbar");
-    }
-
-    if (conf.enabled("roll20.zoom")) {
-        remQ.push("#zoomclick");
-    }
-
-    if (conf.enabled("roll20.darkmodeTgl")) {
-        remQ.push(".dark-mode-switch");
-    }
-
-    if (conf.enabled("roll20.playerBox")) {
-        remQ.push("#playerzone");
-    }
-
-    return remQ;
-}
-
 export function getModQ(conf:Config):Mod[] {
     let modQ:Mod[] = [];
 

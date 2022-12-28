@@ -1,10 +1,7 @@
 import app from "../package.json";
 import { Opcode, Message, MsgBuilder, Config, log } from "../common";
 import { ConfigMap } from "./config-map";
-import { getConfig, getRemQ, Mod, getModQ } from "../vtt";
-
-const ON = "ON";
-const OFF = "OFF";
+import { getConfig, Mod, getModQ } from "../vtt";
 
 async function getTabIndex(tabID:number):Promise<number> {
     const tab = await chrome.tabs.get(tabID);
@@ -63,51 +60,17 @@ async function handleConfChange(confMap:ConfigMap, tabID:number, tabIndex:number
         log(`Enabling on tab ${tabIndex}.`);
 
         const modQ = await getModQ(tabURL, conf);
-        const remQ = await getRemQ(tabURL, conf);
 
         chrome.scripting.executeScript({
             target: { tabId: tabID },
             func: modUI,
             args: [ app.name, modQ ],
         });
-
-        chrome.scripting.executeScript({
-            target: { tabId: tabID },
-            func: removeUI,
-            args: [ app.name, remQ ],
-        });
     } else {
         log(`Disabling on tab ${tabIndex}.`);
 
         chrome.tabs.reload(tabID);
     }
-}
-
-function removeUI(app:void, remQ:void) {
-    const log = function(message:string){
-        console.log(`[${app}] ${message}`);
-    };
-
-    let q = remQ as unknown as string[];
-
-    let remCount:number = 0;
-
-    q.forEach((query) => {
-        const elems = document.querySelectorAll(query);
-
-        if (elems.length > 1) {
-            log(`Removing multiple instances of ${query}.`);
-        } else {
-            log(`Removing ${query}.`);
-        }
-
-        elems.forEach((elem) => {
-            elem.remove();
-            remCount++;
-        })
-    });
-
-    log(`Removed ${remCount} UI elements.`);
 }
 
 function modUI(app:void, modQ:void) {

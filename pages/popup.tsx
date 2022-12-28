@@ -1,7 +1,6 @@
 import BEM from "../components/bem";
 import Configuration from "../components/configuration";
-import { getVTTID, getConfig } from "../vtt";
-import { Opcode, Message, Config } from "../common";
+import { getVTTID } from "../vtt";
 import Heading from "../components/heading";
 import React from "react";
 import ReactDOM from "react-dom";
@@ -49,7 +48,6 @@ async function onReady() {
     const tabID = await getTabID();
 
     const vttSupported = getVTTID(tabURL) !== undefined;
-    const config:Config = await getConfig(tabURL);
 
     ReactDOM.render(<Popup appName="VTT Observe" vttName={getVTTID(tabURL)} tabID={tabID}
         vttSupported={vttSupported} />,

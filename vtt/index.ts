@@ -21,19 +21,6 @@ export function getVTTID(url:string):string {
     return undefined;
 }
 
-export async function getRemoveQueries(url:string):Promise<string[]> {
-    const id = getVTTID(url);
-
-    if (id !== undefined) {
-        switch (id) {
-            case ROLL20:
-                return await require("./roll20.json").remove;
-        }
-    }
-
-    return undefined;
-}
-
 export async function getConfig(url:string):Promise<Config> {
     const id = getVTTID(url);
 
@@ -45,19 +32,6 @@ export async function getConfig(url:string):Promise<Config> {
     }
 
     return new Config();
-}
-
-export async function getRemQ(url:string, config:Config):Promise<string[]> {
-    const id = getVTTID(url);
-
-    if (id !== undefined) {
-        switch (id) {
-            case ROLL20:
-                return (await require("./roll20")).getRemQ(config);
-        }
-    }
-
-    return [];
 }
 
 export async function getModQ(url:string, config:Config):Promise<Mod[]> {
