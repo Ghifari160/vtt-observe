@@ -13,7 +13,7 @@ const URLS:URLMap = {
 
 export function getVTTID(url:string):string {
     for (const u in URLS) {
-        if (url.startsWith(u)) {
+        if (typeof url !== "undefined" && url.startsWith(u)) {
             return URLS[u];
         }
     }
