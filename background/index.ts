@@ -1,6 +1,7 @@
 import app from "../package.json";
-import { getConfig, getRemQ } from "../vtt";
 import { Opcode, Message, MsgBuilder, Config, log } from "../common";
+import { ConfigMap } from "./config-map";
+import { getConfig, getRemQ } from "../vtt";
 
 const ON = "ON";
 const OFF = "OFF";
@@ -15,7 +16,7 @@ async function getTabURL(tabID:number):Promise<string> {
     return tab.url;
 }
 
-let confMap = new Map<number, Config>();
+let confMap = new ConfigMap();
 
 chrome.runtime.onConnect.addListener(async (port) => {
     port.onMessage.addListener(async (msg:Message) => {
@@ -32,7 +33,7 @@ chrome.runtime.onConnect.addListener(async (port) => {
                 conf = new Config();
                 conf.deserialize(msg.payload);
 
-                confMap.set(tabID, conf);
+                await confMap.set(tabID, conf);
 
                 handleConfChange(confMap, tabID, tabIndex, tabURL);
                 break;
@@ -40,7 +41,7 @@ chrome.runtime.onConnect.addListener(async (port) => {
             case Opcode.Get:
                 log(`GET from ${tabID}.`);
 
-                conf = confMap.get(tabID);
+                conf = await confMap.get(tabID);
                 if (typeof conf === "undefined") {
                     conf = await getConfig(tabURL);
                 }
@@ -55,8 +56,8 @@ chrome.runtime.onConnect.addListener(async (port) => {
     });
 });
 
-async function handleConfChange(confMap:Map<number, Config>, tabID:number, tabIndex:number, tabURL:string) {
-    const conf = confMap.get(tabID);
+async function handleConfChange(confMap:ConfigMap, tabID:number, tabIndex:number, tabURL:string) {
+    const conf = await confMap.get(tabID);
 
     if (conf.enabled("global")) {
         log(`Enabling on tab ${tabIndex}.`);

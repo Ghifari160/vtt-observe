@@ -8,7 +8,7 @@ const pkgManName = "package.json";
 const extManName = "manifest.json";
 const buildDir = "out";
 
-const perms = [ "activeTab", "scripting" ];
+const perms = [ "activeTab", "scripting", "storage", ];
 const vttWhitelist = [ "https://app.roll20.net/editor/*" ];
 const serviceWorker = "background.js";
 
