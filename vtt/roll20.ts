@@ -9,11 +9,11 @@ class Roll20Config extends Config {
     protected setDefaults() {
         super.setDefaults();
 
-        this.set("roll20.toolbar", true);
-        this.set("roll20.zoom", true);
-        this.set("roll20.darkmodeTgl", true);
-        this.set("roll20.playerBox", false);
-        this.set("roll20.scrollbar", true);
+        this.set("roll20.toolbar", true, "Hide Toolbar");
+        this.set("roll20.zoom", true, "Hide Zoom");
+        this.set("roll20.darkmodeTgl", true, "Hide Dark Mode Switch");
+        this.set("roll20.playerBox", false, "Hide Players");
+        this.set("roll20.scrollbar", true, "Hide Scroll Bar");
     }
 };
 export default Roll20Config;

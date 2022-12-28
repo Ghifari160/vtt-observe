@@ -22,7 +22,7 @@ export class Config {
     }
 
     protected setDefaults() {
-        this.set("global");
+        this.set("global", false, "Observer Mode");
     }
 
     set(key:string, enabled?:boolean, label?:string) {
