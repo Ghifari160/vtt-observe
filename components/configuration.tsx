@@ -1,8 +1,7 @@
 import BEM from "./bem";
-import { Message, Config, log } from "../common";
+import { Opcode, Message, MsgBuilder, Config, log } from "../common";
 import React from "react";
 import Toggle from "./toggle";
-
 
 class Input extends React.Component<{
     label:string
@@ -33,22 +32,46 @@ class Input extends React.Component<{
 };
 
 class Configuration extends React.Component<{
-    config:Config
     vttSupported:boolean
     tabID:number
 }, {
     BEM:BEM,
     config:Config
-    msg:chrome.runtime.Port
 }> {
+    private msg:chrome.runtime.Port
+
     constructor(props:any) {
         super(props);
 
         this.state = {
             BEM: new BEM("config"),
-            config: props.config,
-            msg: chrome.runtime.connect(null, {name: "popup"}),
+            config: new Config(),
         };
+    }
+
+    componentDidMount() {
+        this.msg = chrome.runtime.connect(null, { name: "popup" });
+
+        this.msg.postMessage(MsgBuilder(Opcode.Get, this.props.tabID));
+        this.msg.onMessage.addListener((msg:Message) => {
+            const opcode = msg.opcode;
+            const tabID = msg.tabID;
+
+            if (tabID == this.props.tabID) {
+                let conf:Config;
+                switch (opcode) {
+                    case Opcode.Set:
+                        conf = new Config();
+                        conf.deserialize(msg.payload);
+
+                        this.setState({ config: conf });
+                }
+            }
+        });
+    }
+
+    componentWillUnmount() {
+        this.msg.disconnect();
     }
 
     onClick(key:string) {
@@ -73,13 +96,7 @@ class Configuration extends React.Component<{
             log(`[${this.props.tabID}] ${key} set to ${config.enabled(key)}`);
 
             this.setState({ config: config });
-
-            let msg:Message = {
-                tabID: this.props.tabID,
-                config: config.serialize()
-            };
-
-            this.state.msg.postMessage(msg);
+            this.msg.postMessage(MsgBuilder(Opcode.Set, this.props.tabID, config));
         }
     }
 

@@ -1,4 +1,3 @@
-
 export interface ConfEntry {
     key:string
     label:string

@@ -1,6 +1,6 @@
 import app from "../package.json";
-import { getRemQ } from "../vtt";
-import { Message, Config, log } from "../common";
+import { getConfig, getRemQ } from "../vtt";
+import { Opcode, Message, MsgBuilder, Config, log } from "../common";
 
 const ON = "ON";
 const OFF = "OFF";
@@ -15,20 +15,43 @@ async function getTabURL(tabID:number):Promise<string> {
     return tab.url;
 }
 
-chrome.runtime.onConnect.addListener(async (port) => {
-    let confMap = new Map<number, Config>();
+let confMap = new Map<number, Config>();
 
+chrome.runtime.onConnect.addListener(async (port) => {
     port.onMessage.addListener(async (msg:Message) => {
+        const opcode = msg.opcode;
         const tabID = msg.tabID;
         const tabIndex = await getTabIndex(tabID);
         const tabURL = await getTabURL(tabID);
 
-        let conf = new Config();
-        conf.deserialize(msg.config);
+        let conf:Config;
+        switch (opcode) {
+            case Opcode.Set:
+                log(`SET from ${tabID}.`);
 
-        confMap.set(tabID, conf);
+                conf = new Config();
+                conf.deserialize(msg.payload);
 
-        handleConfChange(confMap, tabID, tabIndex, tabURL);
+                confMap.set(tabID, conf);
+
+                handleConfChange(confMap, tabID, tabIndex, tabURL);
+                break;
+
+            case Opcode.Get:
+                log(`GET from ${tabID}.`);
+
+                conf = confMap.get(tabID);
+                if (typeof conf === "undefined") {
+                    conf = await getConfig(tabURL);
+                }
+
+                port.postMessage(MsgBuilder(Opcode.Set, tabID, conf));
+                break;
+
+            case Opcode.Info:
+                log(`INFO from ${tabID}: ${msg.payload}`);
+                break;
+        }
     });
 });
 

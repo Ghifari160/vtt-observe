@@ -1,7 +1,7 @@
 import BEM from "../components/bem";
 import Configuration from "../components/configuration";
 import { getVTTID, getConfig } from "../vtt";
-import { Config } from "../common";
+import { Opcode, Message, Config } from "../common";
 import Heading from "../components/heading";
 import React from "react";
 import ReactDOM from "react-dom";
@@ -11,7 +11,6 @@ type Props = {
     vttName?:string
 
     tabID:number
-    config:Config
     vttSupported:boolean
 };
 
@@ -37,8 +36,7 @@ class Popup extends React.Component<Props, State> {
             </div>
 
             <div className={BEM.getElement("config")}>
-                <Configuration tabID={this.props.tabID} config={this.props.config}
-                    vttSupported={this.props.vttSupported} />
+                <Configuration tabID={this.props.tabID} vttSupported={this.props.vttSupported} />
             </div>
         </div>;
     }
@@ -52,7 +50,7 @@ async function onReady() {
     const config:Config = await getConfig(tabURL);
 
     ReactDOM.render(<Popup appName="VTT Observe" vttName={getVTTID(tabURL)} tabID={tabID}
-        config={config} vttSupported={vttSupported} />,
+        vttSupported={vttSupported} />,
         document.querySelector("body"));
 }
 
